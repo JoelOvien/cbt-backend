@@ -1,0 +1,12 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: cbt-backend-mysql
+    env_file:
+      - ./app.env
+    ports:
+      - '6500:3306'
+    volumes:
+      - mysqlDB:/var/lib/mysql
+volumes:
+  mysqlDB:

@@ -9,7 +9,6 @@ import (
 // Config is a struct and uses the mapstructure tags to list the environment variables we want Viper to load.
 type Config struct {
 	DBHost         string `mapstructure:"MYSQL_HOST"`
-	DBUserName     string `mapstructure:"MYSQL_USER"`
 	DBUserPassword string `mapstructure:"MYSQL_PASSWORD"`
 	DBName         string `mapstructure:"MYSQL_DATABASE"`
 	DBPort         string `mapstructure:"MYSQL_PORT"`

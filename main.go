@@ -1,13 +1,18 @@
 package main
 
 import (
-	"github.com/JoelOvien/cbt-backend"
+	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/gofiber/fiber/v2"
 	"log"
 )
 
 func init() {
 	config, err := database.LoadConfig(".")
+	if err != nil {
+		log.Fatalln("Failed to load config \n", err.Error())
+
+	}
+	database.ConnectToDB(&config)
 }
 
 func main() {

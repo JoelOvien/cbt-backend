@@ -44,3 +44,17 @@ func ValidateStruct[T any](payload T) []*ErrorResponse {
 	}
 	return errors
 }
+
+// UserResponse struct for user response
+type UserResponse struct {
+	UserID         string    `gorm:"not null" json:"UserID"`
+	Surname        string    `gorm:"not null" json:"Surname"`
+	FirstName      string    `gorm:"not null" json:"FirstName"`
+	EmailAddress   string    `gorm:"not null" json:"EmailAddress" validate:"email,required"`
+	UserStatus     string    `gorm:"not null" json:"UserStatus"`
+	UserType       string    `gorm:"not null" json:"UserType"`
+	DateCreated    time.Time `gorm:"not null" json:"DateCreated"`
+	DateUpdated    time.Time `gorm:"not null" json:"DateUpdated"`
+	LastAccessDate time.Time `gorm:"not null" json:"LastAccessDate"`
+	DepartmentID   string    `gorm:"not null" json:"DepartmentID"`
+}

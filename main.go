@@ -1,9 +1,14 @@
 package main
 
 import (
+	"github.com/JoelOvien/cbt-backend"
 	"github.com/gofiber/fiber/v2"
 	"log"
 )
+
+func init() {
+	config, err := database.LoadConfig(".")
+}
 
 func main() {
 	app := fiber.New()

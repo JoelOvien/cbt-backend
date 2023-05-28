@@ -5,19 +5,19 @@ import (
 	"time"
 )
 
-// User struct for all users
-type User struct {
-	UserID         string    `gorm:"not null" json:"UserID"`
-	Surname        string    `gorm:"not null" json:"Surname"`
-	FirstName      string    `gorm:"not null" json:"FirstName"`
-	EmailAddress   string    `gorm:"not null" json:"EmailAddress" validate:"email,required"`
-	Password       *string   `gorm:"not null" json:"Password" validate:"required,min=8"`
-	UserStatus     string    `gorm:"not null" json:"UserStatus"`
-	UserType       string    `gorm:"not null" json:"UserType"`
-	DateCreated    time.Time `gorm:"not null" json:"DateCreated"`
-	DateUpdated    time.Time `gorm:"not null" json:"DateUpdated"`
-	LastAccessDate time.Time `gorm:"not null" json:"LastAccessDate"`
-	DepartmentID   string    `gorm:"not null" json:"DepartmentID"`
+// Users struct for all users
+type Users struct {
+	UserID         string    `gorm:"column:UserID;not null" json:"UserID" validate:"required"`
+	Surname        string    `gorm:"column:Surname;not null" json:"Surname" validate:"required"`
+	FirstName      string    `gorm:"column:FirstName;not null" json:"FirstName" validate:"required"`
+	EmailAddress   string    `gorm:"column:EmailAddress;not null" json:"EmailAddress" validate:"email,required"`
+	Password       string    `gorm:"column:Password;not null" json:"Password" validate:"required,min=8"`
+	UserStatus     string    `gorm:"column:UserStatus;not null" json:"UserStatus" validate:"required"`
+	UserType       string    `gorm:"column:UserType;not null" json:"UserType" validate:"required"`
+	DateCreated    time.Time `gorm:"column:DateCreated;not null" json:"DateCreated"`
+	DateUpdated    time.Time `gorm:"column:DateUpdated;not null" json:"DateUpdated"`
+	LastAccessDate time.Time `gorm:"column:LastAccessDate;not null" json:"LastAccessDate"`
+	DepartmentID   string    `gorm:"column:DepartmentID;not null" json:"DepartmentID" validate:"required"`
 }
 
 var validate = validator.New()

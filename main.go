@@ -1,29 +1,57 @@
 package main
 
 import (
+	"github.com/JoelOvien/cbt-backend/controllers"
 	"github.com/JoelOvien/cbt-backend/database"
+	"github.com/JoelOvien/cbt-backend/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"log"
+)
+
+var (
+	// AuthController export
+	AuthController controllers.AuthController
+	// AuthRouteController export
+	AuthRouteController routes.AuthRouteController
 )
 
 func init() {
 	config, err := database.LoadConfig(".")
 	if err != nil {
 		log.Fatalln("Failed to load config \n", err.Error())
-
+	} else {
+		log.Println(" 🚀 Config loaded successfully")
 	}
+
 	database.ConnectToDB(&config)
+
+	AuthController = controllers.NewAuthController(database.DB)
+	AuthRouteController = routes.NewAuthRouteController(AuthController)
 }
 
 func main() {
 	app := fiber.New()
+	micro := fiber.New()
 
-	app.Get("/api/home", func(c *fiber.Ctx) error {
+	app.Mount("/api", micro)
+	app.Use(logger.New())
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:3000",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowMethods:     "GET, POST, PATCH, DELETE, PUT",
+		AllowCredentials: true,
+	}))
+
+	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Status(200).JSON(fiber.Map{
 			"status":  "success",
 			"message": "Welcome to my CBT project",
 		})
 	})
+
+	AuthRouteController.AuthRoute(micro)
 
 	log.Fatal(app.Listen(":8000"))
 }

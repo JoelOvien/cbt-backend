@@ -31,7 +31,13 @@ func (cc *CollegeController) FetchAllColleges(ctx *fiber.Ctx) error {
 
 	var colleges []models.College
 
-	middleware.DeserializeUser(ctx)
+	err := middleware.DeserializeUser(ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  fiber.StatusUnauthorized,
+			"message": err.Error(),
+		})
+	}
 
 	// get all colleges in COLLEGE table
 	result := cc.DB.Table("COLLEGE").Limit(intLimit).Offset(offset).Find(&colleges)

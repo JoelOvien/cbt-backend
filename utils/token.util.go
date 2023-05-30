@@ -62,12 +62,19 @@ func ValidateToken(token string, publicKey string) (interface{}, error) {
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("validate: %w", err)
+		if err.Error() == "token contains an invalid number of segments" {
+			return nil, fmt.Errorf("Unauthorized")
+		}
+
+		if err.Error() == "illegal base64 data at input byte 36" {
+			return nil, fmt.Errorf("Unauthorized")
+		}
+		return nil, fmt.Errorf("%w", err)
 	}
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 	if !ok || !parsedToken.Valid {
-		return nil, fmt.Errorf("validate: invalid token")
+		return nil, fmt.Errorf("Unauthorized")
 	}
 
 	return claims["sub"], nil

@@ -16,55 +16,36 @@ func DeserializeUser(ctx *fiber.Ctx) error {
 	cookie.Name = "access_token"
 
 	authorizationHeader := ctx.Get("Authorization")
-	fmt.Println(authorizationHeader)
 
 	fields := strings.Fields(authorizationHeader)
 
 	if len(fields) != 0 && fields[0] == "Bearer" {
 		accessToken = fields[1]
-		fmt.Println(accessToken)
 	} else {
 		accessToken = cookie.Value
-		fmt.Println(accessToken)
 	}
 
 	if accessToken == "" {
-		fmt.Println("error access token is empty stirng")
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"status":  fiber.StatusUnauthorized,
-			"message": "You are not logged in",
-		})
+		return fmt.Errorf("Unauthorized")
+
 	}
 
 	config, _ := database.LoadConfig(".")
-	fmt.Println("after setting config", accessToken)
 
-	//called this function to validate the access token and extract the payload (user’s ID) we stored in it
 	sub, err := utils.ValidateToken(accessToken, config.AccessTokenPublicKey)
 	if err != nil {
-		fmt.Println("error", err.Error())
-		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"status":  fiber.StatusUnauthorized,
-			"message": err.Error(),
-		})
+		return fmt.Errorf(err.Error())
 
 	}
 
 	var user models.Users
 	result := database.DB.Table("USERS").First(&user, "UserID = ?", fmt.Sprint(sub))
 	if result.Error != nil {
-		fmt.Println("error", result.Error)
-		return ctx.Status(fiber.StatusForbidden).JSON(fiber.Map{
-			"status":  fiber.StatusForbidden,
-			"message": "The user belonging to this token no logger exists",
-		})
+		return fmt.Errorf(result.Error.Error())
 
 	}
 
 	ctx.Set("currentUser", user.UserID)
+	return nil
 
-	return ctx.Status(fiber.StatusForbidden).JSON(fiber.Map{
-		"status":  fiber.StatusForbidden,
-		"message": "The user belonging to this token no logger exists",
-	})
 }

@@ -15,6 +15,11 @@ var (
 	AuthController controllers.AuthController
 	// AuthRouteController export
 	AuthRouteController routes.AuthRouteController
+
+	// CollegeController export
+	CollegeController controllers.CollegeController
+	// CollegeRouteController export
+	CollegeRouteController routes.CollegeRouteController
 )
 
 func init() {
@@ -29,6 +34,10 @@ func init() {
 
 	AuthController = controllers.NewAuthController(database.DB)
 	AuthRouteController = routes.NewAuthRouteController(AuthController)
+
+	CollegeController = controllers.NewCollegeController(database.DB)
+	CollegeRouteController = routes.NewCollegeRouteController(CollegeController)
+
 }
 
 func main() {
@@ -52,6 +61,7 @@ func main() {
 	})
 
 	AuthRouteController.AuthRoute(micro)
+	CollegeRouteController.CollegeRoute(micro)
 
 	log.Fatal(app.Listen(":8000"))
 }

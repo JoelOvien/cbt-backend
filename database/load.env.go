@@ -24,6 +24,10 @@ type Config struct {
 	RefreshTokenExpiresIn  time.Duration `mapstructure:"REFRESH_TOKEN_EXPIRED_IN"`
 	AccessTokenMaxAge      int           `mapstructure:"ACCESS_TOKEN_MAXAGE"`
 	RefreshTokenMaxAge     int           `mapstructure:"REFRESH_TOKEN_MAXAGE"`
+
+	JwtSecret    string        `mapstructure:"JWT_SECRET"`
+	JwtExpiresIn time.Duration `mapstructure:"JWT_EXPIRED_IN"`
+	JwtMaxAge    int           `mapstructure:"JWT_MAXAGE"`
 }
 
 // LoadConfig is the function that loads tthe config from our app.env file

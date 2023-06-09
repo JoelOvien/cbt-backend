@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 	"strconv"
+	"time"
 )
 
 // CollegeController is a struct to store our db instance
@@ -50,5 +51,62 @@ func (cc *CollegeController) FetchAllColleges(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "results": len(colleges), "colleges": colleges})
+
+}
+
+// CreateCollege creates a new college in the COLLEGE table
+func (cc *CollegeController) CreateCollege(ctx *fiber.Ctx) error {
+
+	var collegePayload models.College
+
+	err := middleware.DeserializeUser(ctx)
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  fiber.StatusUnauthorized,
+			"message": err.Error(),
+		})
+	}
+
+	// Parse body into struct
+	err = ctx.BodyParser(&collegePayload)
+	if err != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
+	errors := models.ValidateStruct(collegePayload)
+	if errors != nil {
+		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
+	}
+
+	// check if college with same ID exists
+	existingCollege := &models.College{}
+	existingCollegeResult := cc.DB.Table("COLLEGE").Where("CollegeID = ?", collegePayload.CollegeID).First(&existingCollege)
+
+	if existingCollegeResult.Error == nil {
+		return ctx.Status(fiber.StatusConflict).JSON(fiber.Map{
+			"status":  fiber.StatusConflict,
+			"message": "A college with this ID already exists",
+		})
+	}
+
+	now := time.Now()
+
+	collegePayload.CollegeStatus = 1
+	collegePayload.DateCreated = now
+	collegePayload.DateUpdated = now
+
+	// create new college
+	result := cc.DB.Table("COLLEGE").Create(&collegePayload)
+
+	if result.Error != nil {
+		return ctx.Status(fiber.StatusBadGateway).JSON(fiber.Map{
+			"status":  fiber.StatusBadGateway,
+			"message": result.Error,
+		})
+	}
+
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "college": collegePayload})
 
 }

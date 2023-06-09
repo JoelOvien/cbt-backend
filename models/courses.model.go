@@ -6,9 +6,9 @@ import (
 
 // Course table
 type Course struct {
-	CourseCode  string    `gorm:"size:6;primaryKey" json:"CourseCode"`
-	CourseTitle string    `gorm:"size:20" json:"CourseTitle"`
-	CreditUnits int16     `gorm:"type:smallint" json:"CreditUnits"`
-	DateCreated time.Time `gorm:"type:date" json:"DateCreated"`
-	DateUpdated time.Time `gorm:"type:date" json:"DateUpdated"`
+	CourseCode  string    `gorm:"column:CourseCode;not null" json:"CourseCode" validate:"required"`
+	CourseTitle string    `gorm:"column:CourseTitle;not null" json:"CourseTitle" validate:"required"`
+	CreditUnits int16     `gorm:"column:CreditUnits;not null" json:"CreditUnits" validate:"required"`
+	DateCreated time.Time `gorm:"column:DateCreated;not null" json:"DateCreated"`
+	DateUpdated time.Time `gorm:"column:DateUpdated;not null" json:"DateUpdated"`
 }

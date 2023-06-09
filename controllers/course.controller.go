@@ -11,18 +11,18 @@ import (
 	"time"
 )
 
-// DepartmentController is a struct to store our db instance
-type DepartmentController struct {
+// CourseController is a struct to store our db instance
+type CourseController struct {
 	DB *gorm.DB
 }
 
-// NewDepartmentController is a constructor for DepartmentController
-func NewDepartmentController(DB *gorm.DB) DepartmentController {
-	return DepartmentController{DB}
+// NewCourseController is a constructor for CourseController
+func NewCourseController(DB *gorm.DB) CourseController {
+	return CourseController{DB}
 }
 
-// FetchAllDepartments fetches all Departments from the Department table
-func (dc *DepartmentController) FetchAllDepartments(ctx *fiber.Ctx) error {
+// FetchAllCourses fetches all DCourses from the Course table
+func (cc *CourseController) FetchAllCourses(ctx *fiber.Ctx) error {
 
 	var page = ctx.Query("page", "1")
 	var limit = ctx.Query("limit", "10")
@@ -31,7 +31,7 @@ func (dc *DepartmentController) FetchAllDepartments(ctx *fiber.Ctx) error {
 	intLimit, _ := strconv.Atoi(limit)
 	offset := (intPage - 1) * intLimit
 
-	var Departments []models.Department
+	var Courses []models.Course
 
 	err := middleware.DeserializeUser(ctx)
 	if err != nil {
@@ -46,8 +46,8 @@ func (dc *DepartmentController) FetchAllDepartments(ctx *fiber.Ctx) error {
 	// Use the userID value
 	fmt.Println("user id is ", userID)
 
-	// get all Departments in Department table
-	result := dc.DB.Table("DEPARTMENT").Limit(intLimit).Offset(offset).Find(&Departments)
+	// get all DCourses in DCourse table
+	result := cc.DB.Table("COURSES").Limit(intLimit).Offset(offset).Find(&Courses)
 
 	if result.Error != nil {
 		return ctx.Status(fiber.StatusBadGateway).JSON(fiber.Map{
@@ -56,14 +56,13 @@ func (dc *DepartmentController) FetchAllDepartments(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "results": len(Departments), "Departments": Departments})
-
+	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "results": len(Courses), "Courses": Courses})
 }
 
-// CreateDepartment creates a new college in the COLLEGE table
-func (dc *DepartmentController) CreateDepartment(ctx *fiber.Ctx) error {
+// CreateCourse creates a new Course to the COURSES Table
+func (cc *CourseController) CreateCourse(ctx *fiber.Ctx) error {
 
-	var department models.Department
+	var course models.Course
 
 	err := middleware.DeserializeUser(ctx)
 	if err != nil {
@@ -74,37 +73,37 @@ func (dc *DepartmentController) CreateDepartment(ctx *fiber.Ctx) error {
 	}
 
 	// Parse body into struct
-	err = ctx.BodyParser(&department)
+	err = ctx.BodyParser(&course)
 	if err != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"status":  fiber.StatusBadRequest,
 			"message": err.Error(),
 		})
 	}
-	errors := models.ValidateStruct(department)
+
+	errors := models.ValidateStruct(course)
 	if errors != nil {
 		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
-	// check if college with same ID exists
-	existingDepartment := &models.Department{}
-	existingDepartmentResult := dc.DB.Table("DEPARTMENT").Where("DepartmentID = ?", department.DepartmentID).First(&existingDepartment)
+	// check if course with same CourseCode exists
+	existingCourse := &models.Course{}
+	existingCourseResult := cc.DB.Table("COURSES").Where("CourseCode = ?", course.CourseCode).First(&existingCourse)
 
-	if existingDepartmentResult.Error == nil {
+	if existingCourseResult.Error == nil {
 		return ctx.Status(fiber.StatusConflict).JSON(fiber.Map{
 			"status":  fiber.StatusConflict,
-			"message": "A department with this ID already exists",
+			"message": "A course with this ID already exists",
 		})
 	}
 
-	now := time.Now()
+	var time = time.Now()
 
-	department.DepartmentStatus = 1
-	department.DateCreated = now
-	department.DateUpdated = now
+	course.DateCreated = time
+	course.DateUpdated = time
 
-	// create new college
-	result := dc.DB.Table("DEPARTMENT").Create(&department)
+	// create new Course
+	result := cc.DB.Table("COURSES").Create(&course)
 
 	if result.Error != nil {
 		return ctx.Status(fiber.StatusBadGateway).JSON(fiber.Map{
@@ -113,6 +112,6 @@ func (dc *DepartmentController) CreateDepartment(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "college": department})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "Course": course})
 
 }

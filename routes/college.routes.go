@@ -20,6 +20,7 @@ func NewCollegeRouteController(collegeController controllers.CollegeController) 
 func (rc *CollegeRouteController) CollegeRoute(micro fiber.Router) {
 	micro.Route("/college", func(router fiber.Router) {
 		router.Get("/colleges", rc.collegeRouteController.FetchAllColleges)
+		router.Post("", rc.collegeRouteController.CreateCollege)
 	})
 
 }

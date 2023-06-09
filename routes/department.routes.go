@@ -20,6 +20,7 @@ func NewDepartmentRouteController(departmentController controllers.DepartmentCon
 func (rc *DepartmentRouteController) DepartmentRoute(micro fiber.Router) {
 	micro.Route("/department", func(router fiber.Router) {
 		router.Get("/departments", rc.departmentRouteController.FetchAllDepartments)
+		router.Post("", rc.departmentRouteController.CreateDepartment)
 	})
 
 }

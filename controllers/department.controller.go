@@ -113,6 +113,6 @@ func (dc *DepartmentController) CreateDepartment(ctx *fiber.Ctx) error {
 		})
 	}
 
-	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "college": department})
+	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "department": department})
 
 }

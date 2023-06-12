@@ -35,6 +35,11 @@ var (
 	RoleController controllers.RoleController
 	// RoleRouteController export
 	RoleRouteController routes.RoleRouteController
+
+	// UserController export
+	UserController controllers.UserController
+	// UserRouteController export
+	UserRouteController routes.UserRouteController
 )
 
 func init() {
@@ -61,6 +66,9 @@ func init() {
 
 	RoleController = controllers.NewRoleController(database.DB)
 	RoleRouteController = routes.NewRoleRouteController(RoleController)
+
+	UserController = controllers.NewUserController(database.DB)
+	UserRouteController = routes.NewUserRouteController(UserController)
 
 }
 
@@ -89,6 +97,7 @@ func main() {
 	DepartmentRouteController.DepartmentRoute(micro)
 	CourseRouteController.CourseRoute(micro)
 	RoleRouteController.RoleRoute(micro)
+	UserRouteController.UserRoute(micro)
 
 	log.Fatal(app.Listen(":8000"))
 }

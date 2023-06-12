@@ -3,6 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/JoelOvien/cbt-backend/database"
+	"github.com/JoelOvien/cbt-backend/middleware"
 	"github.com/JoelOvien/cbt-backend/models"
 	"github.com/JoelOvien/cbt-backend/utils"
 
@@ -159,11 +160,26 @@ func (ac *AuthController) CreateUser(ctx *fiber.Ctx) error {
 		return ctx.Status(fiber.StatusBadRequest).JSON(errors)
 	}
 
+	err := middleware.DeserializeUserAndCheckUserType(ctx, "ADMIN")
+	if err != nil {
+		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  fiber.StatusUnauthorized,
+			"message": err.Error(),
+		})
+	}
+
 	hashedPassword, err := utils.HashPassword(payload.Password)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  fiber.StatusInternalServerError,
 			"message": err.Error(),
+		})
+	}
+
+	if payload.UserType != "STAFF" && payload.UserType != "STUDENT" {
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"status":  fiber.StatusBadRequest,
+			"message": "Invalid UserType",
 		})
 	}
 

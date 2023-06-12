@@ -4,7 +4,6 @@ import (
 	"github.com/JoelOvien/cbt-backend/middleware"
 	"github.com/JoelOvien/cbt-backend/models"
 
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 	"strconv"
@@ -33,18 +32,13 @@ func (dc *DepartmentController) FetchAllDepartments(ctx *fiber.Ctx) error {
 
 	var Departments []models.Department
 
-	err := middleware.DeserializeUser(ctx)
+	err := middleware.DeserializeUserAndCheckUserType(ctx, "ADMIN")
 	if err != nil {
 		return ctx.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  fiber.StatusUnauthorized,
 			"message": err.Error(),
 		})
 	}
-
-	currentUser := ctx.Get("currentUser")
-	userID := currentUser
-	// Use the userID value
-	fmt.Println("user id is ", userID)
 
 	// get all Departments in Department table
 	result := dc.DB.Table("DEPARTMENT").Limit(intLimit).Offset(offset).Find(&Departments)

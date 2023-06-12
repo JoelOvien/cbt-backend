@@ -18,6 +18,7 @@ type Users struct {
 	DateUpdated    time.Time `gorm:"column:DateUpdated;not null" json:"DateUpdated"`
 	LastAccessDate time.Time `gorm:"column:LastAccessDate;not null" json:"LastAccessDate"`
 	DepartmentID   string    `gorm:"column:DepartmentID;not null" json:"DepartmentID" validate:"required"`
+	Role           string    `gorm:"column:Role;not null" json:"Role" validate:"required"`
 }
 
 var validate = validator.New()

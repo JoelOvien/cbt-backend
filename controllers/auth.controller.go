@@ -2,14 +2,16 @@ package controllers
 
 import (
 	"fmt"
+
 	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/JoelOvien/cbt-backend/middleware"
 	"github.com/JoelOvien/cbt-backend/models"
 	"github.com/JoelOvien/cbt-backend/utils"
 
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
-	"time"
 )
 
 // AuthController is a struct to store db
@@ -134,6 +136,7 @@ func (ac *AuthController) SignInUser(ctx *fiber.Ctx) error {
 		DateUpdated:    user.DateUpdated,
 		LastAccessDate: user.LastAccessDate,
 		DepartmentID:   user.DepartmentID,
+		Role:           user.Role,
 	}
 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{
@@ -217,6 +220,7 @@ func (ac *AuthController) CreateUser(ctx *fiber.Ctx) error {
 				DateUpdated:    payload.DateUpdated,
 				LastAccessDate: payload.LastAccessDate,
 				DepartmentID:   payload.DepartmentID,
+				Role:           payload.Role,
 			}
 
 			result := ac.DB.Table("USERS").Create(&newUser)
@@ -250,6 +254,7 @@ func (ac *AuthController) CreateUser(ctx *fiber.Ctx) error {
 		DateUpdated:    payload.DateUpdated,
 		LastAccessDate: payload.LastAccessDate,
 		DepartmentID:   payload.DepartmentID,
+		Role:           payload.Role,
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(fiber.Map{"status": "success", "data": fiber.Map{"message": userResponse}})

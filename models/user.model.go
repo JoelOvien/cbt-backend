@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/go-playground/validator/v10"
 	"time"
+
+	"github.com/go-playground/validator/v10"
 )
 
 // Users struct for all users
@@ -58,4 +59,5 @@ type UserResponse struct {
 	DateUpdated    time.Time `gorm:"not null" json:"DateUpdated"`
 	LastAccessDate time.Time `gorm:"not null" json:"LastAccessDate"`
 	DepartmentID   string    `gorm:"not null" json:"DepartmentID"`
+	Role           string    `gorm:"not null" json:"Role"`
 }

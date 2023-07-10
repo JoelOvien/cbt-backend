@@ -6,10 +6,10 @@ import (
 
 // RegisteredCourses table struct
 type RegisteredCourses struct {
-	Session     string    `gorm:"size:9;primaryKey" json:"Session"`
-	Semester    string    `gorm:"size:1;primaryKey" json:"Semester"`
-	UserID      string    `gorm:"size:15" json:"UserID"`
-	CourseCode  string    `gorm:"size:6" json:"CourseCode"`
-	DateCreated time.Time `gorm:"type:date" json:"DateCreated"`
-	DateUpdated time.Time `gorm:"type:date" json:"DateUpdated"`
+	Session     string    `gorm:"column:Session;size:9;primaryKey" json:"Session"`
+	Semester    string    `gorm:"column:Semester;size:1;primaryKey" json:"Semester"`
+	UserID      string    `gorm:"column:UserID;not null" json:"UserID" validate:"required"`
+	CourseCode  string    `gorm:"column:CourseCode;not null" json:"CourseCode" validate:"required"`
+	DateCreated time.Time `gorm:"column:DateCreated;type:date" json:"DateCreated"`
+	DateUpdated time.Time `gorm:"column:DateUpdated;type:date" json:"DateUpdated"`
 }

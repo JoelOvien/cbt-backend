@@ -3,11 +3,12 @@ package middleware
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/JoelOvien/cbt-backend/models"
 	"github.com/JoelOvien/cbt-backend/utils"
 	"github.com/gofiber/fiber/v2"
-	"strings"
 )
 
 // DeserializeUser is a middleware to deserialize user

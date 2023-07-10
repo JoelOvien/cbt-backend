@@ -1,13 +1,14 @@
 package main
 
 import (
+	"log"
+
 	"github.com/JoelOvien/cbt-backend/controllers"
 	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/JoelOvien/cbt-backend/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"log"
 )
 
 var (
@@ -30,6 +31,11 @@ var (
 	CourseController controllers.CourseController
 	// CourseRouteController export
 	CourseRouteController routes.CourseRouteController
+
+	// RegisteredCourseController export
+	RegisteredCourseController controllers.RegisteredCourseController
+	// RegisteredCourseRouteController export
+	RegisteredCourseRouteController routes.RegisteredCourseRouteController
 
 	// RoleController export
 	RoleController controllers.RoleController
@@ -64,6 +70,9 @@ func init() {
 	CourseController = controllers.NewCourseController(database.DB)
 	CourseRouteController = routes.NewCourseRouteController(CourseController)
 
+	RegisteredCourseController = controllers.NewRegisteredCourseController(database.DB)
+	RegisteredCourseRouteController = routes.NewRegisteredCourseRouteController(RegisteredCourseController)
+
 	RoleController = controllers.NewRoleController(database.DB)
 	RoleRouteController = routes.NewRoleRouteController(RoleController)
 
@@ -96,6 +105,7 @@ func main() {
 	CollegeRouteController.CollegeRoute(micro)
 	DepartmentRouteController.DepartmentRoute(micro)
 	CourseRouteController.CourseRoute(micro)
+	RegisteredCourseRouteController.RegisteredCourseRoute(micro)
 	RoleRouteController.RoleRoute(micro)
 	UserRouteController.UserRoute(micro)
 

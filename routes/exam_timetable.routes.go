@@ -27,8 +27,8 @@ func (ec *ExamTimetableRouteController) ExamTimetableRoute(micro fiber.Router) {
 		router.Get("", ec.examTimetableRouteController.FetchExamTimetableBySemester)
 	})
 
-	micro.Route("/exam/timetable", func(router fiber.Router) {
-		router.Get("/?CourseCode:CourseCode", ec.examTimetableRouteController.FetchExamTimetableByCourseCode)
+	micro.Route("/exam/timetable/CourseCode/:CourseCode", func(router fiber.Router) {
+		router.Get("", ec.examTimetableRouteController.FetchExamTimetableByCourseCode)
 	})
 
 }

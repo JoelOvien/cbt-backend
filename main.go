@@ -44,6 +44,11 @@ var (
 	// ExamTimetableRouteController export
 	ExamTimetableRouteController routes.ExamTimetableRouteController
 
+	// QuestionsBankController exoort
+	QuestionsBankController controllers.QuestionsBankController
+	// QuestionsBankRouteController export
+	QuestionsBankRouteController routes.QuestionsBankRouteController
+
 	// RoleController export
 	RoleController controllers.RoleController
 	// RoleRouteController export
@@ -82,6 +87,9 @@ func init() {
 
 	ExamTimetableController = controllers.NewExamTimetableController(database.DB)
 	ExamTimetableRouteController = routes.NewExamTimetableRouteController(ExamTimetableController)
+
+	QuestionsBankController = controllers.NewQuestionsBankController(database.DB)
+	QuestionsBankRouteController = routes.NewQuestionsBankRouteController(QuestionsBankController)
 
 	RoleController = controllers.NewRoleController(database.DB)
 	RoleRouteController = routes.NewRoleRouteController(RoleController)
@@ -128,6 +136,7 @@ func main() {
 	CourseRouteController.CourseRoute(micro)
 	RegisteredCourseRouteController.RegisteredCourseRoute(micro)
 	ExamTimetableRouteController.ExamTimetableRoute(micro)
+	QuestionsBankRouteController.QuestionsBankRoute(micro)
 	RoleRouteController.RoleRoute(micro)
 	UserRouteController.UserRoute(micro)
 

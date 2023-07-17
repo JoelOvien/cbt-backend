@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"log"
 
+	firebase "firebase.google.com/go"
 	"github.com/JoelOvien/cbt-backend/controllers"
 	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/JoelOvien/cbt-backend/routes"
@@ -103,11 +105,22 @@ func main() {
 	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
+
 		return c.Status(200).JSON(fiber.Map{
 			"status":  "success",
 			"message": "Welcome to my CBT project",
 		})
 	})
+
+	fconfig := &firebase.Config{ProjectID: "cbt-backend", StorageBucket: "cbt-backend.appspot.com"}
+
+	fapp, err := firebase.NewApp(context.Background(), fconfig)
+	if err != nil {
+		log.Fatalf("Error initializing app: %v\n", err)
+	} else {
+		log.Println(" 🚀 Config loaded successfully", fapp)
+
+	}
 
 	AuthRouteController.AuthRoute(micro)
 	CollegeRouteController.CollegeRoute(micro)

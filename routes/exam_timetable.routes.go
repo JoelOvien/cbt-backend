@@ -19,16 +19,16 @@ func NewExamTimetableRouteController(examTimetableController controllers.ExamTim
 // ExamTimetableRoute defines auth routes for admin login
 func (ec *ExamTimetableRouteController) ExamTimetableRoute(micro fiber.Router) {
 	micro.Route("/exam/timetable", func(router fiber.Router) {
-		router.Get("", ec.examTimetableRouteController.FetchExamTimetable)
+		router.Get("", ec.examTimetableRouteController.FindAllExamTimetable)
 		router.Post("", ec.examTimetableRouteController.CreateExamTimetable)
 	})
 
 	micro.Route("/exam/timetable/:Semester", func(router fiber.Router) {
-		router.Get("", ec.examTimetableRouteController.FetchExamTimetableBySemester)
+		router.Get("", ec.examTimetableRouteController.FindAllExamTimetableBySemester)
 	})
 
 	micro.Route("/exam/timetable/CourseCode/:CourseCode", func(router fiber.Router) {
-		router.Get("", ec.examTimetableRouteController.FetchExamTimetableByCourseCode)
+		router.Get("", ec.examTimetableRouteController.FindAllExamTimetableByCourseCode)
 	})
 
 }

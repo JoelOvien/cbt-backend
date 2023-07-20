@@ -17,8 +17,8 @@ func NewQuestionsBankRouteController(questionsBankController controllers.Questio
 
 // QuestionsBankRoute defines routes
 func (qc *QuestionsBankRouteController) QuestionsBankRoute(micro fiber.Router) {
-	micro.Route("/exam-bank", func(router fiber.Router) {
-		router.Post("", qc.questionsBankRouteController.CreateQuestion)
+	micro.Route("/questions-bank", func(router fiber.Router) {
+		router.Post("/", qc.questionsBankRouteController.CreateQuestion)
+		router.Get("", qc.questionsBankRouteController.FindAll)
 	})
-
 }

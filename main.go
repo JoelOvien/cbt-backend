@@ -1,10 +1,8 @@
 package main
 
 import (
-	"context"
 	"log"
 
-	firebase "firebase.google.com/go"
 	"github.com/JoelOvien/cbt-backend/controllers"
 	"github.com/JoelOvien/cbt-backend/database"
 	"github.com/JoelOvien/cbt-backend/routes"
@@ -49,6 +47,11 @@ var (
 	// QuestionsBankRouteController export
 	QuestionsBankRouteController routes.QuestionsBankRouteController
 
+	// ExamBankController exoort
+	ExamBankController controllers.ExamBankController
+	// ExamBankRouteController export
+	ExamBankRouteController routes.ExamBankRouteController
+
 	// RoleController export
 	RoleController controllers.RoleController
 	// RoleRouteController export
@@ -91,6 +94,9 @@ func init() {
 	QuestionsBankController = controllers.NewQuestionsBankController(database.DB)
 	QuestionsBankRouteController = routes.NewQuestionsBankRouteController(QuestionsBankController)
 
+	ExamBankController = controllers.NewExamBankController(database.DB)
+	ExamBankRouteController = routes.NewExamBankRouteController(ExamBankController)
+
 	RoleController = controllers.NewRoleController(database.DB)
 	RoleRouteController = routes.NewRoleRouteController(RoleController)
 
@@ -106,9 +112,9 @@ func main() {
 	app.Mount("/api", micro)
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:3000",
-		AllowHeaders:     "Origin, Content-Type, Accept",
-		AllowMethods:     "GET, POST, PATCH, DELETE, PUT",
+		AllowOrigins:     "http://localhost:8000",
+		AllowHeaders:     "Origin, Content-Type, Content-type, Accept, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Cache-Control, X-Requested-With",
+		AllowMethods:     "GET, POST, PATCH, DELETE, PUT, OPTIONS",
 		AllowCredentials: true,
 	}))
 
@@ -120,16 +126,6 @@ func main() {
 		})
 	})
 
-	fconfig := &firebase.Config{ProjectID: "cbt-backend", StorageBucket: "cbt-backend.appspot.com"}
-
-	fapp, err := firebase.NewApp(context.Background(), fconfig)
-	if err != nil {
-		log.Fatalf("Error initializing app: %v\n", err)
-	} else {
-		log.Println(" 🚀 Config loaded successfully", fapp)
-
-	}
-
 	AuthRouteController.AuthRoute(micro)
 	CollegeRouteController.CollegeRoute(micro)
 	DepartmentRouteController.DepartmentRoute(micro)
@@ -137,6 +133,7 @@ func main() {
 	RegisteredCourseRouteController.RegisteredCourseRoute(micro)
 	ExamTimetableRouteController.ExamTimetableRoute(micro)
 	QuestionsBankRouteController.QuestionsBankRoute(micro)
+	ExamBankRouteController.ExamBankRoute(micro)
 	RoleRouteController.RoleRoute(micro)
 	UserRouteController.UserRoute(micro)
 

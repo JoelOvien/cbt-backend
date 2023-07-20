@@ -143,7 +143,7 @@ func (ac *AuthController) SignInUser(ctx *fiber.Ctx) error {
 		"status":        "success",
 		"access_token":  accessToken,
 		"refresh_token": refreshToken,
-		"data":          fiber.Map{"message": userResponse}})
+		"data":          userResponse})
 
 }
 

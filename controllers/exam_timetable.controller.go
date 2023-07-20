@@ -70,8 +70,8 @@ func (ec *ExamTimetableController) CreateExamTimetable(ctx *fiber.Ctx) error {
 
 }
 
-// FetchExamTimetable fetches all timetables from the db
-func (ec *ExamTimetableController) FetchExamTimetable(ctx *fiber.Ctx) error {
+// FindAllExamTimetable fetches all timetables from the db
+func (ec *ExamTimetableController) FindAllExamTimetable(ctx *fiber.Ctx) error {
 
 	var page = ctx.Query("page", "1")
 	var limit = ctx.Query("limit", "10")
@@ -103,8 +103,8 @@ func (ec *ExamTimetableController) FetchExamTimetable(ctx *fiber.Ctx) error {
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "results": len(ExamTimetables), "exam_timetable": ExamTimetables})
 }
 
-// FetchExamTimetableBySemester fetches timetable by semester
-func (ec *ExamTimetableController) FetchExamTimetableBySemester(ctx *fiber.Ctx) error {
+// FindAllExamTimetableBySemester fetches timetable by semester
+func (ec *ExamTimetableController) FindAllExamTimetableBySemester(ctx *fiber.Ctx) error {
 
 	semester := ctx.Params("Semester")
 
@@ -146,8 +146,8 @@ func (ec *ExamTimetableController) FetchExamTimetableBySemester(ctx *fiber.Ctx) 
 	return ctx.Status(fiber.StatusOK).JSON(fiber.Map{"status": "success", "results": len(ExamTimetable), "exam_timetable": ExamTimetable})
 }
 
-// FetchExamTimetableByCourseCode fetches timetable by semester
-func (ec *ExamTimetableController) FetchExamTimetableByCourseCode(ctx *fiber.Ctx) error {
+// FindAllExamTimetableByCourseCode fetches timetable by semester
+func (ec *ExamTimetableController) FindAllExamTimetableByCourseCode(ctx *fiber.Ctx) error {
 
 	courseCode := ctx.Params("CourseCode")
 

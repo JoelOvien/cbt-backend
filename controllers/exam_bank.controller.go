@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"errors"
-	"log"
 	"strconv"
 	"time"
 
@@ -69,8 +68,6 @@ func (qc *ExamBankController) SubmitAnswer(ctx *fiber.Ctx) error {
 		answerDetails[i].ID = uuid.New()   // Update the value in the slice directly
 		answerDetails[i].DateUpdated = now // Update the value in the slice directly
 	}
-
-	log.Println(answerDetails)
 
 	// Create new questions in the database
 	result := qc.DB.Table("EXAM_BANK").Create(&answerDetails)
@@ -158,6 +155,9 @@ func (qc *ExamBankController) FindAll(ctx *fiber.Ctx) error {
 	var limit = ctx.Query("limit", "10")
 	var courseCode = ctx.Query("courseCode")
 	var questionID = ctx.Query("questionID")
+	var semester = ctx.Query("semester")
+	var session = ctx.Query("session")
+	var userID = ctx.Query("userID")
 
 	intPage, _ := strconv.Atoi(page)
 	intLimit, _ := strconv.Atoi(limit)
@@ -180,6 +180,15 @@ func (qc *ExamBankController) FindAll(ctx *fiber.Ctx) error {
 	}
 	if questionID != "" {
 		query = query.Where("AnswerTypeID = ?", questionID)
+	}
+	if semester != "" {
+		query = query.Where("Semester = ?", semester)
+	}
+	if session != "" {
+		query = query.Where("Session = ?", session)
+	}
+	if userID != "" {
+		query = query.Where("UserID = ?", userID)
 	}
 
 	// Fetch the filtered questions from the database

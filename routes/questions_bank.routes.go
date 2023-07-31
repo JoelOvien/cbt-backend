@@ -19,6 +19,9 @@ func NewQuestionsBankRouteController(questionsBankController controllers.Questio
 func (qc *QuestionsBankRouteController) QuestionsBankRoute(micro fiber.Router) {
 	micro.Route("/questions-bank", func(router fiber.Router) {
 		router.Post("/", qc.questionsBankRouteController.CreateQuestion)
+		router.Post("/multiple", qc.questionsBankRouteController.UploadMultipleQuestions)
 		router.Get("", qc.questionsBankRouteController.FindAll)
+		router.Get("/no-rand", qc.questionsBankRouteController.FindAllNoRand)
+
 	})
 }

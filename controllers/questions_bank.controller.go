@@ -149,14 +149,14 @@ func (qc *QuestionsBankController) UploadMultipleQuestions(ctx *fiber.Ctx) error
 
 // FindAll questions in QUESTIONSBANK table
 func (qc *QuestionsBankController) FindAll(ctx *fiber.Ctx) error {
-	// var page = ctx.Query("page", "1")
+	var page = ctx.Query("page", "1")
 	var limit = ctx.Query("limit", "10")
 	var courseCode = ctx.Query("courseCode")
 	var answerTypeID = ctx.Query("answerTypeID")
 
-	// intPage, _ := strconv.Atoi(page)
+	intPage, _ := strconv.Atoi(page)
 	intLimit, _ := strconv.Atoi(limit)
-	// offset := (intPage - 1) * intLimit
+	offset := (intPage - 1) * intLimit
 
 	var filteredQuestions []models.QuestionsBank
 
@@ -178,7 +178,7 @@ func (qc *QuestionsBankController) FindAll(ctx *fiber.Ctx) error {
 	}
 
 	// Fetch the filtered questions from the database
-	result := query.Limit(intLimit).Find(&filteredQuestions)
+	result := query.Limit(intLimit).Offset(offset).Find(&filteredQuestions)
 
 	if result.Error != nil {
 		return ctx.Status(fiber.StatusBadGateway).JSON(fiber.Map{
